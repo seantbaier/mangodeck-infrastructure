@@ -13,7 +13,7 @@ terraform {
 }
 
 include {
-  path = findd_in_parent_folders()
+  path = find_in_parent_folders()
 }
 
 dependency "hosted_zone" {

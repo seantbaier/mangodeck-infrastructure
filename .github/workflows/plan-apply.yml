@@ -1,0 +1,82 @@
+name: Build and Test
+on: 
+  push: # change this to pull_request when done
+    branches: [development] 
+  pull_request:
+    branches: [development]
+    
+env:
+  APP_NAME: amzallies
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
+
+      - name: Setup Terraform v1.0.4
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.4
+          terraform_wrapper: false
+
+      - name: Setup Terraform version
+        run: terraform -v
+
+      - name: Setup Terraform wrapper path
+        run: which terraform
+
+      - name: Install Terragrunt v0.31.3
+        run: |
+          sudo wget -q -O /bin/terragrunt "https://github.com/gruntwork-io/terragrunt/releases/download/v0.31.3/terragrunt_linux_amd64"
+          sudo chmod +x /bin/terragrunt
+          terragrunt -v
+
+      - name: Terragrunt Format
+        id: fmt
+        run: cd ./sandbox && terragrunt run-all validate
+
+      - name: Terragrunt Plan
+        id: plan
+        if: github.event_name == 'push'
+        run: cd ./sandbox && terragrunt run-all plan -no-color
+        continue-on-error: true
+
+      - name: Create Comment with Terraform Plan Output
+        uses: actions/github-script@0.9.0
+        if: github.event_name == 'push'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            <details><summary>Show Plan</summary>
+            \`\`\`${process.env.PLAN}\`\`\`
+            </details>
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+              
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      # - name: Terragrunt Apply
+        # if: needs.setup.outputs.target_push
+        # run: cd ./terraform/infrastructure/main/${{secrets.AWS_REGION}}/${{needs.setup.outputs.tf_env}}/${{matrix.target}} && terragrunt apply -auto-approve
