@@ -16,6 +16,7 @@ resource "aws_s3_bucket" "this" {
   acl           = var.acl
 
 
+
   dynamic "website" {
     for_each = length(keys(var.website)) == 0 ? [] : [var.website]
 
@@ -28,4 +29,15 @@ resource "aws_s3_bucket" "this" {
   }
 
   tags = local.tags
+}
+
+
+
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket = aws_s3_bucket.this[0].id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }

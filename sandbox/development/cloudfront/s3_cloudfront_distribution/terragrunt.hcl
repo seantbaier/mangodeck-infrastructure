@@ -28,8 +28,9 @@ dependency "certificate" {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment = local.environment
-  app_name    = local.app_name
+  environment      = local.environment
+  app_name         = local.app_name
+  website_endpoint = dependency.spa_static_bucket.outputs.website_endpoint
   aws_s3_bucket_origin = {
     arn                         = dependency.spa_static_bucket.outputs.arn
     id                          = dependency.spa_static_bucket.outputs.id
@@ -37,4 +38,10 @@ inputs = {
   }
   aliases             = ["${local.environment}.${local.domain_name}"]
   acm_certificate_arn = dependency.certificate.outputs.arn
+
+
+  # custom_error_response = {
+  #   response_page_path = "index.html"
+  #   response_code      = 200
+  # }
 }

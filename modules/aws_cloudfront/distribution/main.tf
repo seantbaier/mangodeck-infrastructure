@@ -35,6 +35,11 @@ resource "aws_s3_bucket_policy" "this" {
 resource "aws_cloudfront_distribution" "this" {
   count = var.create ? 1 : 0
 
+  default_root_object = "index.html"
+  is_ipv6_enabled     = true
+  enabled             = true
+
+
   origin {
     domain_name = var.aws_s3_bucket_origin.bucket_regional_domain_name
     origin_id   = local.origin_id
@@ -44,9 +49,17 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
-  enabled             = true
-  is_ipv6_enabled     = true
-  default_root_object = "index.html"
+  custom_error_response {
+    response_code      = 404
+    response_page_path = "/index.html"
+    error_code         = 404
+  }
+
+  custom_error_response {
+    response_code      = 403
+    response_page_path = "/index.html"
+    error_code         = 403
+  }
 
   # logging_config {
   #   include_cookies = false
@@ -57,7 +70,7 @@ resource "aws_cloudfront_distribution" "this" {
   aliases = var.aliases
 
   default_cache_behavior {
-    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.origin_id
 

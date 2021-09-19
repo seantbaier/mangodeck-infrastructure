@@ -3,6 +3,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
   domain_name = local.account_vars.locals.domain_name
+  app_name    = local.account_vars.locals.app_name
   environment = local.environment_vars.locals.environment
 }
 
@@ -10,7 +11,7 @@ locals {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../..//modules/aws_s3/s3_bucket"
+  source = "../../../..//modules/aws_secrets_manager/secret"
 }
 
 include {
@@ -19,17 +20,5 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment = local.environment
-  bucket      = "${local.environment}.${local.domain_name}"
-  # acl         = "public-read"
-  # block_public_acls       = true
-  # block_public_policy     = false
-  # ignore_public_acls      = false
-  # restrict_public_buckets = false
-
-  # website = {
-  #   index_document = "index.html"
-  #   error_document = "index.html"
-  # }
-
+  name = "${local.environment}-${local.app_name}"
 }
