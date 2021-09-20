@@ -35,13 +35,3 @@ variable "acm_certificate_arn" {
   type        = string
   default     = null
 }
-
-variable "website_endpoint" {
-  description = "AWS S3 bucket website endpoint."
-  type        = string
-}
-
-# variable "custom_error_response" {
-#   description = "Custom error responses"
-#   type        = map(any)
-# }

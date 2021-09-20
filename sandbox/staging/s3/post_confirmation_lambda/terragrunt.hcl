@@ -20,5 +20,6 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   environment = local.environment
-  bucket      = "${local.environment}.${local.domain_name}"
+  bucket      = "${local.environment}-post-confirmation-lambda"
+  acl         = "private"
 }
