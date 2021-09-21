@@ -49,3 +49,23 @@ variable "restrict_public_buckets" {
   type        = bool
   default     = true
 }
+
+
+variable "principals" {
+  description = "Principal field for Bucket Policy"
+  type        = list(string)
+  default     = null
+}
+
+
+variable "actions" {
+  description = "Action field for Bucket Policy"
+  type        = list(string)
+  default     = null
+}
+
+variable "create_policy" {
+  description = "Bool to create policy or not"
+  type        = bool
+  default     = true
+}
