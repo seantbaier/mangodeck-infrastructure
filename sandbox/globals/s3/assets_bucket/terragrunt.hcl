@@ -1,9 +1,8 @@
 locals {
-  account_vars     = read_terragrunt_config(find_in_parent_folders("account.hcl"))
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl"))
 
-  app_name    = local.account_vars.locals.app_name
-  environment = local.environment_vars.locals.environment
+  app_name     = local.account_vars.locals.app_name
+  account_name = local.account_vars.locals.account_name
 }
 
 
@@ -19,8 +18,8 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment             = local.environment
-  bucket                  = "${local.environment}-${local.app_name}-assets"
+  environment             = local.account_name
+  bucket                  = "${local.account_name}-${local.app_name}-assets"
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
