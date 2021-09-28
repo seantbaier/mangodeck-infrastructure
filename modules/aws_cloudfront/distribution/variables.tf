@@ -16,18 +16,18 @@ variable "app_name" {
 
 variable "tags" {
   description = "AWS resrouce tags."
-  type        = map
+  type        = map(any)
   default     = {}
 }
 
 variable "aws_s3_bucket_origin" {
   description = "AWS S3 bucket being used as the origin."
-  type        = map
+  type        = map(any)
 }
 
 variable "aliases" {
   description = " (Optional) - Extra CNAMEs (alternate domain names), if any, for this distribution."
-  type        = list
+  type        = list(any)
 }
 
 variable "acm_certificate_arn" {
@@ -35,4 +35,3 @@ variable "acm_certificate_arn" {
   type        = string
   default     = null
 }
-
