@@ -1,0 +1,6 @@
+type VirtualAssistant {
+  id: ID!
+  sub: String!
+  email: String!
+  firstName: String
+}

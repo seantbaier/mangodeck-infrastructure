@@ -1,0 +1,17 @@
+type Seller {
+  id: ID!
+  email: String!
+}
+
+type Mutation {
+  createSeller(id: ID!, email: String!): Seller
+}
+
+type Query {
+  getSeller(id: ID!): Seller
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

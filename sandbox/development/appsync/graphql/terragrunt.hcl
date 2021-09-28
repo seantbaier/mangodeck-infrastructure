@@ -23,9 +23,31 @@ dependency "user_pool" {
   config_path = "../../cognito/user_pool"
 }
 
+dependency "seller_table" {
+  config_path = "../../dynamodb/seller_table"
+}
+
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  name         = "${local.environment}-${local.app_name}"
-  user_pool_id = dependency.user_pool.outputs.id
-  aws_region   = local.aws_region
+  name   = "${local.environment}-${local.app_name}"
+  # schema = file("schema.graphql")
+  api_keys = {
+    future  = "2021-08-20T15:00:00Z"
+    default = null
+  }
+  authentication_type = "AMAZON_COGNITO_USER_POOLS"
+  user_pool_config = {
+    user_pool_id   = dependency.user_pool.outputs.id
+    default_action = "DENY"
+    aws_region     = local.aws_region
+  }
+
+
+  datasources = {
+    seller_table = {
+      type       = "AMAZON_DYNAMODB"
+      table_name = dependency.seller_table.outputs.dynamodb_table_id
+      region     = local.aws_region
+    }
+  }
 }
