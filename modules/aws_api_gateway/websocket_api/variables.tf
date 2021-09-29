@@ -15,10 +15,10 @@ variable "name" {
 
 variable "lambda_invoke_arn" {
   description = "Lambda to invoke for integration"
-  type        = string
+  type = string
 }
 
 variable "function_name" {
   description = "Lambda to function name for invoke permissions"
-  type        = string
+  type = string
 }

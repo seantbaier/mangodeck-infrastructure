@@ -24,7 +24,9 @@ dependency "http_handler" {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment = local.environment
-  app_name    = local.app_name
-  name = "${local.environment}=${local.app_name}-rest-api"
+  environment       = local.environment
+  app_name          = local.app_name
+  name              = "${local.environment}-${local.app_name}-rest-api"
+  lambda_invoke_arn = dependency.http_handler.outputs.invoke_arn
+  function_name     = dependency.http_handler.outputs.function_name
 }
