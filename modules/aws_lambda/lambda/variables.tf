@@ -111,3 +111,9 @@ variable "trusted_entities" {
   type        = any
   default     = []
 }
+
+variable "handler" {
+  description = "Handler for lambda function to be invoked"
+  type = string
+  default = null
+}

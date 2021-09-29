@@ -26,7 +26,7 @@ resource "aws_lambda_function" "this" {
   role          = aws_iam_role.this[0].arn
   s3_bucket     = var.s3_bucket
   s3_key        = var.s3_key
-  handler       = "app.main.handler"
+  handler       = var.handler
   runtime       = var.runtime
 
   dynamic "environment" {

@@ -4,7 +4,7 @@ locals {
 
   app_name      = local.account_vars.locals.app_name
   environment   = local.environment_vars.locals.environment
-  function_name = "${local.environment}-${local.app_name}-handleWebSocket"
+  function_name = "${local.environment}-${local.app_name}-webSocketHandler"
 }
 
 
@@ -30,6 +30,7 @@ inputs = {
   s3_key        = "function.zip"
   s3_bucket     = dependency.s3_lambda_bucket.outputs.bucket
   runtime       = "nodejs12.x"
+  handler       = "src/handler.handleWebSocket"
 
   role_name        = "${local.function_name}-lambda-role"
   trusted_entities = ["cognito-idp.amazonaws.com", "lambda.amazonaws.com"]

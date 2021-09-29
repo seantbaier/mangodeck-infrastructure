@@ -16,6 +16,10 @@ dependency "events_table" {
   config_path = "../dynamodb/events_table"
 }
 
+dependency "stream_handler_permissions" {
+  config_path = "../stream_handler_permissions"
+}
+
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   function_name    = dependency.dynamodb_stream_handler.outputs.arn

@@ -30,6 +30,7 @@ inputs = {
   s3_key        = "function.zip"
   s3_bucket     = dependency.s3_lambda_bucket.outputs.bucket
   runtime       = "nodejs12.x"
+  handler       = "src/handler.handleHttp"
 
   role_name        = "${local.function_name}-lambda-role"
   trusted_entities = ["cognito-idp.amazonaws.com", "lambda.amazonaws.com"]
