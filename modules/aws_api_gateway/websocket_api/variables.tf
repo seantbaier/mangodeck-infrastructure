@@ -15,10 +15,21 @@ variable "name" {
 
 variable "lambda_invoke_arn" {
   description = "Lambda to invoke for integration"
-  type = string
+  type        = string
 }
 
 variable "function_name" {
   description = "Lambda to function name for invoke permissions"
-  type = string
+  type        = string
 }
+
+variable "throttling_burst_limit" {
+  description = "(Optional) The throttling burst limit for the default route."
+  type        = number
+}
+
+variable "throttling_rate_limit" {
+  description = "(Optional) The throttling rate limit for the default route."
+  type        = number
+}
+

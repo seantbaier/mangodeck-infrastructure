@@ -30,12 +30,14 @@ inputs = {
   s3_key        = "function.zip"
   s3_bucket     = dependency.s3_lambda_bucket.outputs.bucket
   runtime       = "nodejs12.x"
-  handler       = "src/handler.handleHttp"
+  handler       = "src/index.handleHttp"
 
   role_name        = "${local.function_name}-lambda-role"
   trusted_entities = ["cognito-idp.amazonaws.com", "lambda.amazonaws.com"]
   environment_variables = {
-    LOG_LEVEL = "debug"
+    LOG_LEVEL  = "debug"
+    APP_NAME   = local.app_name
+    APOLLO_ENV = local.environment
   }
 
   tags = {

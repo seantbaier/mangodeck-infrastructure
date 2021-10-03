@@ -24,9 +24,11 @@ dependency "websocket_handler" {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment       = local.environment
-  app_name          = local.app_name
-  name              = "${local.environment}-${local.app_name}-websocket-api"
-  lambda_invoke_arn = dependency.websocket_handler.outputs.invoke_arn
-  function_name     = dependency.websocket_handler.outputs.function_name
+  environment            = local.environment
+  app_name               = local.app_name
+  name                   = "${local.environment}-${local.app_name}-websocket-api"
+  lambda_invoke_arn      = dependency.websocket_handler.outputs.invoke_arn
+  function_name          = dependency.websocket_handler.outputs.function_name
+  throttling_burst_limit = 5000
+  throttling_rate_limit  = 10000
 }
